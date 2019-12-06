@@ -1,0 +1,17 @@
+[Unit]
+Description=Traefik
+Documentation=https://docs.traefik.io
+After=cloud-final.service
+
+[Service]
+Type=notify
+User={{ traefik_user }}
+Group={{ traefik_user }}
+AmbientCapabilities=CAP_NET_BIND_SERVICE
+ExecStart=/usr/local/bin/traefik --configFile={{traefik_config_dir}}/traefik.yml
+Restart=always
+WatchdogSec=1s
+
+[Install]
+WantedBy=multi-user.target
+

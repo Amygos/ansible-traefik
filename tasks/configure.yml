@@ -1,0 +1,40 @@
+---
+- name: Update Trefik static configuration
+  copy:
+    content: |
+      #jinja2: lstrip_blocks: True
+      ---
+      {{ traefik_static_configuration | to_nice_yaml(indent=2) }}
+    dest: "{{ traefik_config_dir }}/traefik.yml"
+    force: true
+    owner: "{{ traefik_user }}"
+    group: "{{ traefik_group}}"
+    mode: 0640
+
+- name: Update Trefik dynamic file configuration
+  copy:
+    content: |
+      #jinja2: lstrip_blocks: True
+      ---
+      {{ traefik_configuration_provider_file | to_nice_yaml(indent=2) }}
+    dest: "{{ traefik_static_configuration.providers.file.filename }}"
+    force: true
+    owner: "{{ traefik_user }}"
+    group: "{{ traefik_group }}"
+    mode: 0640
+  when: traefik_static_configuration.providers.file.filename is defined
+
+- name: Update traefik dynamic files configurations
+  copy:
+    content: |
+      #jinja2: lstrip_blocks: True
+      ---
+      {{ item.value | to_nice_yaml(indent=2) }}
+    dest: "{{ traefik_static_configuration.providers.file.directory }}/{{ item.key }}.yml"
+    force: true
+    owner: "{{ traefik_user }}"
+    group: "{{ traefik_group }}" 
+    mode: 0640
+  with_dict: "{{ traefik_configuration_provider_files }}"
+  when: traefik_static_configuration.providers.file.directory is defined
+

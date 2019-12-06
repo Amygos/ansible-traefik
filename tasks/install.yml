@@ -1,0 +1,77 @@
+---
+- name: Create Traefik system group
+  group:
+    name: "{{ traefik_group }}"
+    system: true
+    state: present
+
+- name: Create Traefik system user
+  user:
+    name: "{{ traefik_user }}"
+    system: true
+    shell: "/sbin/nologin"
+    group: traefik
+    createhome: false
+
+- name: Create traefik configuration directory
+  file:
+    path: "{{ traefik_config_dir }}"
+    state: directory
+    owner: root
+    group: "{{ traefik_user }}"
+    mode: 0770
+
+- name: Create traefik dynamic files configuration directory
+  file:
+    path: "{{ traefik_static_configurtio.providers.file.directory }}"
+    state: directory
+    owner: "{{ traefik_user }}"
+    group: traefik
+    mode: 0770
+  when: traefik_static_configurtio.providers.file.directory is defined
+
+- block:
+
+    - name: Download Traefik
+      get_url:
+        url: "https://github.com/containous/traefik/releases/download/v{{ traefik_version }}/traefik_v{{ traefik_version }}_linux_amd64.tar.gz"
+        dest: /tmp
+
+    - name: Stop Traefik service
+      systemd:
+        name: traefik
+        status: stopped
+      notify:
+        - restart traefik
+      when:
+        - ansible_facts.services['traefik.service'] is defined
+        - ansible_facts.services['traefik.service'].state == 'running'
+      tags:
+        - traefik_run 
+
+    - name: Install Traefik
+      unarchive:
+        src: "/tmp/traefik_v{{ traefik_version }}_linux_amd64.tar.gz"
+        dest: /usr/local/bin
+        remote_src: yes
+        exclude:
+          - CHANGELOG.md
+          - LICENSE.md
+
+  when: traefik_update
+
+- name: Update Traefik systemd service unit
+  template:
+    src: traefik.service.j2
+    dest: /usr/lib/systemd/system/traefik.service
+    owner: root
+    group: root
+    mode: 0644
+  notify:
+    - traefik restart
+
+- name: Enable Traefik service
+  systemd:
+    name: traefik
+    enabled: true
+

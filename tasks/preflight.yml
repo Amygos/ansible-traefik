@@ -1,0 +1,27 @@
+---
+- name: Check if traefik is installed
+  stat:
+    path: "/usr/local/bin/traefik"
+  register: __traefik_is_installed
+  check_mode: false
+
+- name: Gather currently installed traefik version (if any)
+  command: "/usr/local/bin/traefik version"
+  args:
+    warn: false
+  changed_when: false
+  register: __traefik_current_version_output
+  check_mode: false
+  when: __traefik_is_installed.stat.exists
+
+- name: Traefik installed version
+  set_fact:
+    traefik_installed_version:  "{{ (__traefik_current_version_output.stdout_lines[0] | regex_replace('^Version:      '))}}"
+  when: __traefik_is_installed.stat.exists
+
+- name: Detect if we have to update traefik
+  set_fact:
+    traefik_update: "{% if traefik_installed_version is defined and traefik_installed_version == traefik_version %}false{% else %}true{%endif%}"
+
+- name: Populate service facts
+  service_facts:

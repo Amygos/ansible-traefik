@@ -1,0 +1,15 @@
+---
+traefik_version: 2.0.6
+traefik_config_dir: /etc/traefik
+
+traefik_user: traefik
+traefik_group: traefik
+
+traefik_static_configuration:
+  entryPoints:
+    http:
+      address: ":80"
+
+traefik_configuration_provider_file: {}
+
+traefik_configuration_provider_files: {}
