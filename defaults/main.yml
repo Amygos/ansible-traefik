@@ -1,5 +1,5 @@
 ---
-traefik_version: 2.1.1
+traefik_version: 2.1.2
 traefik_config_dir: /etc/traefik
 
 traefik_user: traefik
