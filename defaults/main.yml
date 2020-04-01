@@ -4,6 +4,7 @@ traefik_config_dir: /etc/traefik
 
 traefik_user: traefik
 traefik_group: traefik
+traefik_watchdog_sec: 0
 
 traefik_static_configuration:
   entryPoints:

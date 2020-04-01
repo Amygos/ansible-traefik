@@ -12,6 +12,7 @@ Role Variables
 | `traefik_config_dir`			| /etc/traefik				| Traefik configuration directory		|
 | `traefik_user`			| "traefik"				| Traefik user					|
 | `traefik_group`			| "traefik"				| Traefik group					|
+| `traefik_watchdog_sec`		| 0					| Systemd watchdog timeout for traefik service 	|
 | `traefik_static_configuration`	| entryPoints.http.address: 80`		| Traefik static configuration			|
 | `traefik_configuration_provider_file`	| {}					| Traefik dynamic file configuration section	|
 | `traefik_configuration_provider_files`| {}					| Traefik dynamic files configuration section	|

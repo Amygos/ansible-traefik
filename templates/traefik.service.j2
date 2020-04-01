@@ -10,7 +10,7 @@ Group={{ traefik_user }}
 AmbientCapabilities=CAP_NET_BIND_SERVICE
 ExecStart=/usr/local/bin/traefik --configFile={{traefik_config_dir}}/traefik.yml
 Restart=always
-WatchdogSec=1s
+WatchdogSec={{ traefik_watchdog_sec }}s
 
 [Install]
 WantedBy=multi-user.target
