@@ -8,7 +8,7 @@ Role Variables
 
 | Name 					| Default Value 			| Description 					|
 |---------------------------------------|---------------------------------------|-----------------------------------------------|
-| `traefik_version`			| 2.0.6					| Traefik version				|
+| `traefik_version`			| 2.6.6					| Traefik version				|
 | `traefik_config_dir`			| /etc/traefik				| Traefik configuration directory		|
 | `traefik_user`			| "traefik"				| Traefik user					|
 | `traefik_group`			| "traefik"				| Traefik group					|
