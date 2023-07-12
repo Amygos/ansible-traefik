@@ -23,12 +23,12 @@
 
 - name: Create traefik dynamic files configuration directory
   file:
-    path: "{{ traefik_static_configurtio.providers.file.directory }}"
+    path: "{{ traefik_static_configuration.providers.file.directory }}"
     state: directory
     owner: "{{ traefik_user }}"
     group: traefik
     mode: 0770
-  when: traefik_static_configurtio.providers.file.directory is defined
+  when: traefik_static_configuration.providers.file.directory is defined
 
 - block:
 
