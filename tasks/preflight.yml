@@ -7,8 +7,6 @@
 
 - name: Gather currently installed traefik version (if any)
   command: "/usr/local/bin/traefik version"
-  args:
-    warn: false
   changed_when: false
   register: __traefik_current_version_output
   check_mode: false
